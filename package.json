@@ -1,0 +1,20 @@
+{
+  "name": "assistente-ia",
+  "version": "1.0.0",
+  "description": "Este projeto é um **assistente de IA web** construído com HTML, CSS e JavaScript puros. Ele permite ao usuário:",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2"
+  }
+}
