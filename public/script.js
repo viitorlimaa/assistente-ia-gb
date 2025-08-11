@@ -1,3 +1,4 @@
+// Referências para elementos do DOM
 const html = document.documentElement;
 const themeToggle = document.getElementById("themeToggle");
 const chatForm = document.getElementById("chatForm");
@@ -8,28 +9,32 @@ const responseContent = responseArea.querySelector(".response-content");
 const submitButtonText = submitButton.querySelector(".btn-text");
 const loadingSpinner = submitButton.querySelector(".loading-spinner");
 
-const BACKEND_API_URL = "http://localhost:3000/api/chat"; // URL do backend
+// URL do backend para onde as requisições serão enviadas
+const BACKEND_API_URL = "http://localhost:3000/api/chat";
 
-// Alternar tema claro/escuro
+// Alterna entre tema claro e escuro ao clicar no botão de tema
 themeToggle.addEventListener("click", () => {
   const currentTheme = html.getAttribute("data-theme");
   const newTheme = currentTheme === "dark" ? "light" : "dark";
   html.setAttribute("data-theme", newTheme);
 });
 
+// Controla o estado de loading do botão de envio
 function setLoadingState(isLoading) {
-  submitButton.disabled = isLoading;
-  submitButtonText.classList.toggle("hidden", isLoading);
-  loadingSpinner.classList.toggle("hidden", !isLoading);
+  submitButton.disabled = isLoading; // Desabilita botão enquanto carrega
+  submitButtonText.classList.toggle("hidden", isLoading); // Oculta texto do botão
+  loadingSpinner.classList.toggle("hidden", !isLoading); // Mostra spinner de loading
 }
 
+// Exibe mensagem na área de resposta, pode ser erro (isError=true)
 function displayMessage(message, isError = false) {
-  responseArea.classList.remove("hidden");
-  responseContent.textContent = message;
-  responseContent.classList.toggle("error-message", isError);
-  responseArea.scrollIntoView({ behavior: "smooth", block: "end" });
+  responseArea.classList.remove("hidden"); // Torna a área visível
+  responseContent.textContent = message; // Insere o texto da mensagem
+  responseContent.classList.toggle("error-message", isError); // Aplica estilo de erro se necessário
+  responseArea.scrollIntoView({ behavior: "smooth", block: "end" }); // Scroll para resposta
 }
 
+// Valida se o prompt (pergunta) não está vazio
 function validateInput(prompt) {
   if (!prompt) {
     displayMessage("Erro: Por favor, digite sua pergunta.", true);
@@ -38,13 +43,15 @@ function validateInput(prompt) {
   return true;
 }
 
+// Envia a requisição POST para o backend com o prompt
 async function sendRequest(prompt) {
-  setLoadingState(true);
+  console.log("Enviando requisição para o backend com prompt:", prompt);
+  setLoadingState(true); // Ativa estado de loading
   try {
     const response = await fetch(BACKEND_API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
+      headers: { "Content-Type": "application/json" }, // Define JSON no corpo
+      body: JSON.stringify({ prompt }), // Envia o prompt em JSON
     });
 
     if (!response.ok) {
@@ -55,27 +62,30 @@ async function sendRequest(prompt) {
     }
 
     const data = await response.json();
-    displayMessage(data.response);
+    displayMessage(data.response); // Mostra a resposta da IA
   } catch (error) {
-    displayMessage(`Ocorreu um erro: ${error.message}`, true);
+    displayMessage(`Ocorreu um erro: ${error.message}`, true); // Mostra erro
   } finally {
-    setLoadingState(false);
+    setLoadingState(false); // Desativa estado de loading
   }
 }
 
+// Captura o evento de submit do formulário
 chatForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const prompt = promptInput.value.trim();
+  event.preventDefault(); // Evita recarregar a página
+  console.log("Evento submit disparado");
+  const prompt = promptInput.value.trim(); // Remove espaços
 
   if (validateInput(prompt)) {
-    sendRequest(prompt);
+    console.log("Prompt válido:", prompt);
+    sendRequest(prompt); // Envia a requisição para o backend
   }
 });
 
-// Enviar com Ctrl+Enter
+// Permite enviar a pergunta com Ctrl + Enter no textarea
 promptInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && event.ctrlKey) {
     event.preventDefault();
-    chatForm.dispatchEvent(new Event("submit"));
+    chatForm.dispatchEvent(new Event("submit")); // Dispara o submit do formulário
   }
 });
