@@ -1,61 +1,24 @@
 import express from "express";
-import fetch from "node-fetch";
-import { GEMINI_API_KEY } from "../server-config.js";
+import { getGeminiResponse } from "../services/gemini-services.js";
 
 const router = express.Router();
 
-// Rota POST /api/chat para receber prompt e retornar resposta da Gemini API
+// POST /api/chat
 router.post("/", async (req, res) => {
-  const { prompt } = req.body;
-
-  if (!prompt) {
-    return res.status(400).json({ message: 'Campo "prompt" é obrigatório.' });
-  }
-
-  if (!GEMINI_API_KEY) {
-    return res.status(500).json({ message: "Chave da API não configurada." });
-  }
+  console.log("Requisição recebida:", req.body);
 
   try {
-    const body = {
-      contents: [
-        {
-          parts: [{ text: prompt }],
-        },
-      ],
-    };
+    const { prompt } = req.body;
 
-    console.log("Enviando para Gemini:", prompt);
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Erro Gemini:", errorData);
-      return res.status(500).json({
-        message: errorData.error?.message || "Erro na API Gemini.",
-        details: errorData,
-      });
+    if (typeof prompt !== "string" || !prompt.trim()) {
+      return res.status(400).json({ message: 'O campo "prompt" é obrigatório e deve ser uma string não vazia.' });
     }
 
-    const data = await response.json();
-
-    const aiResponse =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text || "Resposta vazia.";
-
+    const aiResponse = await getGeminiResponse(prompt);
     res.json({ response: aiResponse });
   } catch (error) {
-    console.error("Erro no backend:", error);
-    res
-      .status(500)
-      .json({ message: "Erro no servidor.", error: error.message });
+    console.error("Erro na rota /api/chat:", error.message);
+    res.status(500).json({ message: "Erro ao processar requisição.", error: error.message });
   }
 });
 
