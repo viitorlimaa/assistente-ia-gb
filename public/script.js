@@ -1,3 +1,6 @@
+// =====================
+// Referências de elementos
+// =====================
 const html = document.documentElement;
 const themeToggle = document.getElementById("themeToggle");
 const chatForm = document.getElementById("chatForm");
@@ -8,21 +11,32 @@ const responseContent = responseArea.querySelector(".response-content");
 const submitButtonText = submitButton.querySelector(".btn-text");
 const loadingSpinner = submitButton.querySelector(".loading-spinner");
 
-const BACKEND_API_URL = "http://localhost:3000/api/chat"; // URL do backend
+const BACKEND_API_URL =
+  window.location.protocol === "file:"
+    ? "http://localhost:3000/api/chat"
+    : "/api/chat";
 
+// =====================
 // Alternar tema claro/escuro
+// =====================
 themeToggle.addEventListener("click", () => {
   const currentTheme = html.getAttribute("data-theme");
   const newTheme = currentTheme === "dark" ? "light" : "dark";
   html.setAttribute("data-theme", newTheme);
 });
 
+// =====================
+// Estado de loading no botão
+// =====================
 function setLoadingState(isLoading) {
   submitButton.disabled = isLoading;
   submitButtonText.classList.toggle("hidden", isLoading);
   loadingSpinner.classList.toggle("hidden", !isLoading);
 }
 
+// =====================
+// Exibir mensagens na UI
+// =====================
 function displayMessage(message, isError = false) {
   responseArea.classList.remove("hidden");
   responseContent.textContent = message;
@@ -30,14 +44,22 @@ function displayMessage(message, isError = false) {
   responseArea.scrollIntoView({ behavior: "smooth", block: "end" });
 }
 
+// =====================
+// Validação do input
+// =====================
 function validateInput(prompt) {
   if (!prompt) {
-    displayMessage("Erro: Por favor, digite sua pergunta.", true);
+    displayMessage("Por favor, digite sua pergunta.", true);
     return false;
   }
   return true;
 }
 
+// =====================
+// Enviar requisição ao backend
+// - Mensagem genérica em caso de erro (boas práticas de UX/segurança)
+// - Logs detalhados ficam no console para dev
+// =====================
 async function sendRequest(prompt) {
   setLoadingState(true);
   try {
@@ -48,25 +70,30 @@ async function sendRequest(prompt) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        errorData.message || `Erro do servidor: ${response.status}`
-      );
+      const errorData = await response.json().catch(() => ({}));
+      console.error("Erro detalhado do servidor:", errorData);
+      throw new Error("Não foi possível processar sua solicitação.");
     }
 
     const data = await response.json();
-    displayMessage(data.response);
+    displayMessage(data.response || "Resposta recebida (vazia).");
   } catch (error) {
-    displayMessage(`Ocorreu um erro: ${error.message}`, true);
+    displayMessage(
+      "Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.",
+      true
+    );
+    console.error("Erro capturado:", error);
   } finally {
     setLoadingState(false);
   }
 }
 
+// =====================
+// Eventos de envio
+// =====================
 chatForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const prompt = promptInput.value.trim();
-
   if (validateInput(prompt)) {
     sendRequest(prompt);
   }
