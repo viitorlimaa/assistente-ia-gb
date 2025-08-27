@@ -1,13 +1,13 @@
 import fetch from "node-fetch";
+import { GEMINI_API_KEY } from "../env/env.js";
 
-
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+/**
+ *
+ * @param {string} prompt
+ * @returns
+ */
 
 export async function getGeminiResponse(prompt) {
-  if (!GEMINI_API_KEY) {
-    throw new Error("Chave da API Gemini não configurada.");
-  }
-
   const requestBody = {
     contents: [{ parts: [{ text: prompt }] }],
   };
@@ -22,7 +22,9 @@ export async function getGeminiResponse(prompt) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData?.error?.message || "Erro desconhecido na API Gemini.");
+    throw new Error(
+      errorData?.error?.message || "Erro desconhecido na API Gemini."
+    );
   }
 
   const data = await response.json();
