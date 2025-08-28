@@ -1,108 +1,117 @@
-// =====================
-// Referências de elementos
-// =====================
-const html = document.documentElement;
-const themeToggle = document.getElementById("themeToggle");
-const chatForm = document.getElementById("chatForm");
-const promptInput = document.getElementById("promptInput");
-const submitButton = document.getElementById("submitButton");
-const responseArea = document.getElementById("responseArea");
-const responseContent = responseArea.querySelector(".response-content");
-const submitButtonText = submitButton.querySelector(".btn-text");
-const loadingSpinner = submitButton.querySelector(".loading-spinner");
+// Elementos do DOM
+const chatContainer = document.getElementById("chat-container");
+const userInput = document.getElementById("user-input");
+const sendBtn = document.getElementById("send-btn");
+const toggleThemeBtn = document.getElementById("toggle-theme");
+const clearChatBtn = document.getElementById("clear-chat");
+const charCount = document.getElementById("char-count");
 
-const BACKEND_API_URL =
-  window.location.protocol === "file:"
-    ? "http://localhost:3000/api/chat"
-    : "/api/chat";
-
-// =====================
-// Alternar tema claro/escuro
-// =====================
-themeToggle.addEventListener("click", () => {
-  const currentTheme = html.getAttribute("data-theme");
-  const newTheme = currentTheme === "dark" ? "light" : "dark";
-  html.setAttribute("data-theme", newTheme);
+// Contador interno de caracteres
+const MAX_CHARS = 200;
+userInput.addEventListener("input", () => {
+  if (userInput.value.length > MAX_CHARS) userInput.value = userInput.value.substring(0, MAX_CHARS);
+  charCount.innerText = `${userInput.value.length}/${MAX_CHARS}`;
 });
 
-// =====================
-// Estado de loading no botão
-// =====================
-function setLoadingState(isLoading) {
-  submitButton.disabled = isLoading;
-  submitButtonText.classList.toggle("hidden", isLoading);
-  loadingSpinner.classList.toggle("hidden", !isLoading);
+// Tema Dark/Light
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  html.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
 }
+toggleThemeBtn.addEventListener("click", toggleTheme);
+document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
 
-// =====================
-// Exibir mensagens na UI
-// =====================
-function displayMessage(message, isError = false) {
-  responseArea.classList.remove("hidden");
-  responseContent.textContent = message;
-  responseContent.classList.toggle("error-message", isError);
-  responseArea.scrollIntoView({ behavior: "smooth", block: "end" });
-}
+// Adiciona mensagens ao chat
+function addMessage(text, sender = "bot", isError = false) {
+  const msg = document.createElement("div");
+  msg.classList.add("message", sender);
+  if (isError) msg.classList.add("error");
+  msg.innerText = text;
 
-// =====================
-// Validação do input
-// =====================
-function validateInput(prompt) {
-  if (!prompt) {
-    displayMessage("Por favor, digite sua pergunta.", true);
-    return false;
-  }
-  return true;
-}
+  if (sender === "bot" && !isError) {
+    const copyBtn = document.createElement("button");
+    copyBtn.classList.add("copy-btn");
+    copyBtn.title = "Copiar resposta";
 
-// =====================
-// Enviar requisição ao backend
-// - Mensagem genérica em caso de erro (boas práticas de UX/segurança)
-// - Logs detalhados ficam no console para dev
-// =====================
-async function sendRequest(prompt) {
-  setLoadingState(true);
-  try {
-    const response = await fetch(BACKEND_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
+    const icon = document.createElement("span");
+    icon.classList.add("material-icons");
+    icon.innerText = "content_copy";
+    copyBtn.appendChild(icon);
+
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          const toast = document.createElement("div");
+          toast.classList.add("copied-toast");
+          toast.innerText = "Texto copiado";
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 2000);
+        })
+        .catch(() => alert("Não foi possível copiar o texto"));
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error("Erro detalhado do servidor:", errorData);
-      throw new Error("Não foi possível processar sua solicitação.");
-    }
+    msg.appendChild(copyBtn);
+  }
 
-    const data = await response.json();
-    displayMessage(data.response || "Resposta recebida (vazia).");
-  } catch (error) {
-    displayMessage(
-      "Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.",
-      true
-    );
-    console.error("Erro capturado:", error);
-  } finally {
-    setLoadingState(false);
+  chatContainer.appendChild(msg);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Animação do header ao enviar mensagem
+function shrinkHeader() {
+  const header = document.querySelector(".app-header");
+  header.classList.add("header-small");
+}
+
+// Enviar mensagem
+async function sendMessage() {
+  const message = userInput.value.trim();
+  if (!message) return;
+
+  shrinkHeader();
+  addMessage(message, "user");
+
+  userInput.value = "";
+  charCount.innerText = `0/${MAX_CHARS}`;
+
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: message }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error();
+
+    addMessage(data.response, "bot");
+  } catch (err) {
+    addMessage("Não foi possível processar sua solicitação.", "bot", true);
   }
 }
 
-// =====================
+
+
 // Eventos de envio
-// =====================
-chatForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const prompt = promptInput.value.trim();
-  if (validateInput(prompt)) {
-    sendRequest(prompt);
+sendBtn.addEventListener("click", sendMessage);
+userInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
   }
 });
 
-// Enviar com Ctrl+Enter
-promptInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter" && event.ctrlKey) {
-    event.preventDefault();
-    chatForm.dispatchEvent(new Event("submit"));
-  }
-});
+// Limpar toda a conversa com confirm
+if (clearChatBtn) {
+  clearChatBtn.addEventListener("click", () => {
+    const confirmDelete = confirm("Tem certeza que deseja excluir toda a conversa?");
+    if (confirmDelete) {
+      chatContainer.innerHTML = "";
+      userInput.value = "";
+      charCount.innerText = `0/${MAX_CHARS}`;
+    }
+  });
+}
