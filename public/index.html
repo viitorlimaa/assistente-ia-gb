@@ -1,38 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Assistente IA Moderna</title>
-  <link rel="stylesheet" href="./style.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body>
-  <div class="app-container">
-    <!-- Cabeçalho -->
-    <header class="app-header">
-      <button id="toggle-theme" class="theme-toggle">
-        <span class="material-icons">brightness_6</span>
-      </button>
-      <h1>Assistente IA</h1>
-    </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assistente IA Moderna</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Cabeçalho -->
+      <header class="app-header">
+        <button id="toggle-theme" class="theme-toggle">
+          <span class="material-icons">brightness_6</span>
+        </button>
+        <h1>Assistente IA</h1>
+      </header>
 
-    <!-- Conteúdo central -->
-    <main class="main-content">
-      <div class="search-box">
-        <button id="clear-chat" class="clear-btn"><span class="material-icons">delete</span></button>
-        <input type="text" id="user-input" placeholder="Faça uma pergunta" maxlength="200"/>
-        <span id="char-count" class="char-count">0/200</span>
-        <button class="mic-btn"><span class="material-icons">mic</span></button>
-        <button class="send-btn" id="send-btn"><span class="material-icons">send</span></button>
-      </div>
+      <!-- Conteúdo central -->
+      <main class="main-content">
+        <div class="search-box">
+          <button id="clear-chat" class="clear-btn">
+            <span class="material-icons">delete</span>
+          </button>
+          <input
+            type="text"
+            id="user-input"
+            placeholder="Faça uma pergunta"
+            maxlength="200"
+          />
+          <span id="char-count" class="char-count">0/200</span>
+          <button class="mic-btn">
+            <span class="material-icons">mic</span>
+          </button>
+          <button class="send-btn" id="send-btn">
+            <span class="material-icons">send</span>
+          </button>
+        </div>
 
-      <div id="chat-container" class="chat-container"></div>
-    </main>
-  </div>
-
-
-
-  <script src="script.js"></script>
-</body>
+        <div id="chat-container" class="chat-container"></div>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>
