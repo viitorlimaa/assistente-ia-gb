@@ -10,17 +10,64 @@
   --bot-msg-text: #eee;
 }
 
+/* === Tema claro === */
+[data-theme="light"] {
+  --bg-color: #f5f5f5;
+  --text-color: #111;
+  --card-bg: #ffff;
+  --border-color: #ccc;
+  --user-msg-bg: #aaa;
+  --user-msg-text: #fff;
+  --bot-msg-bg: #eaeaea;
+  --bot-msg-text: #111;
+}
+
+/* === Animações de entrada === */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* variações de delay */
+.fade-delay-1 {
+  animation-delay: 0.1s;
+}
+.fade-delay-2 {
+  animation-delay: 0.2s;
+}
+.fade-delay-3 {
+  animation-delay: 0.3s;
+}
+.fade-delay-4 {
+  animation-delay: 0.4s;
+}
+.fade-delay-5 {
+  animation-delay: 0.5s;
+}
 
 
 /* === Estilos base (MOBILE FIRST) === */
-body, .app-header, .chat-container, .search-box, .message {
+body,
+.app-header,
+.chat-container,
+.search-box,
+.message {
   transition: background 0.3s, color 0.3s;
 }
 
 body {
   background: var(--bg-color);
   color: var(--text-color);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Helvetica Neue", Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -148,7 +195,8 @@ body {
 }
 
 /* Botões copiar/limpar */
-.copy-btn, .clear-btn {
+.copy-btn,
+.clear-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -156,7 +204,8 @@ body {
   font-size: 1rem;
   margin-left: 0.5rem;
 }
-.copy-btn:hover, .clear-btn:hover {
+.copy-btn:hover,
+.clear-btn:hover {
   color: var(--text-color);
 }
 
@@ -174,14 +223,21 @@ body {
   animation: fadeIn 0.3s ease forwards, fadeOut 0.3s ease 2s forwards;
 }
 @keyframes fadeOut {
-  to { opacity: 0; transform: translateY(10px); }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 
 /* === TABLETS (>= 600px) === */
 @media (min-width: 600px) {
-  .message { max-width: min(85%, 720px); }
+  .message {
+    max-width: min(85%, 720px);
+  }
 
-  .app-header h1 { font-size: 1.4rem; }
+  .app-header h1 {
+    font-size: 1.4rem;
+  }
 
   .search-box {
     max-width: 600px;
@@ -196,9 +252,13 @@ body {
 
 /* === DESKTOPS (>= 900px) === */
 @media (min-width: 900px) {
-  .message { max-width: min(80%, 760px); }
+  .message {
+    max-width: min(80%, 760px);
+  }
 
-  .app-header h1 { font-size: 1.6rem; }
+  .app-header h1 {
+    font-size: 1.6rem;
+  }
 
   .search-box {
     max-width: 700px;
@@ -210,6 +270,5 @@ body {
     border-radius: 20px;
   }
 }
-
 
 
