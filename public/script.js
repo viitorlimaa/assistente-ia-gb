@@ -119,7 +119,11 @@ if (clearChatBtn) {
       charCount.innerText = `0/${MAX_CHARS}`;
     }
   });
+
 }
+
+} 
+
 
 // Executa a animação dos elementos ao carregar a página
 window.addEventListener("DOMContentLoaded", () => {
@@ -135,3 +139,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+

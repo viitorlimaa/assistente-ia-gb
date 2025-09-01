@@ -22,8 +22,7 @@
   --bot-msg-text: #111;
 }
 
-
- /* === Animações de entrada === */
+/* === Animações de entrada === */
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -38,11 +37,21 @@
 }
 
 /* variações de delay */
-.fade-delay-1 { animation-delay: 0.1s; }
-.fade-delay-2 { animation-delay: 0.2s; }
-.fade-delay-3 { animation-delay: 0.3s; }
-.fade-delay-4 { animation-delay: 0.4s; }
-.fade-delay-5 { animation-delay: 0.5s; }
+.fade-delay-1 {
+  animation-delay: 0.1s;
+}
+.fade-delay-2 {
+  animation-delay: 0.2s;
+}
+.fade-delay-3 {
+  animation-delay: 0.3s;
+}
+.fade-delay-4 {
+  animation-delay: 0.4s;
+}
+.fade-delay-5 {
+  animation-delay: 0.5s;
+}
 
 
 /* === Estilos base (MOBILE FIRST) === */
@@ -106,13 +115,23 @@ body {
   padding: 0.7rem 1rem;
   border: 1px solid var(--border-color);
   margin: 0 auto 1.5rem auto;
+
   max-width: 100%; /* não ultrapassa largura do container */
   box-sizing: border-box;
+
+  flex-wrap: wrap;
+
 }
 .search-box input {
+
   flex: 1; /* ocupa todo o espaço disponível */
   min-width: 0; /* evita que empurre os botões */
+
+  flex: 1 1 0;
+  min-width: 120px;
+
   background: none;
+  box-sizing: border-box;
   border: none;
   outline: none;
   color: var(--text-color);
@@ -125,10 +144,14 @@ body {
 }
 
 .search-box button {
+
   flex-shrink: 0; /* impede o botão de "sumir" */
   display: flex;
   align-items: center;
   justify-content: center;
+
+  flex-shrink: 0;
+
   background: none;
   border: none;
   cursor: pointer;
@@ -146,6 +169,7 @@ body {
 .char-count {
   font-size: 0.75rem;
   color: #888;
+  flex-shrink: 0;
 }
 
 /* === Chat === */
@@ -271,5 +295,4 @@ body {
     border-radius: 20px;
   }
 }
-
 
