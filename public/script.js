@@ -122,9 +122,6 @@ if (clearChatBtn) {
 
 }
 
-} 
-
-
 // Executa a animação dos elementos ao carregar a página
 window.addEventListener("DOMContentLoaded", () => {
   const elements = [
