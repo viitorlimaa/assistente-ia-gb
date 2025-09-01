@@ -1,10 +1,11 @@
 import fetch from "node-fetch";
 import { GEMINI_API_KEY } from "../env/env.js";
 
+
 /**
- *
- * @param {string} prompt
- * @returns
+ * 
+ * @param {string} prompt 
+ * @returns 
  */
 
 export async function getGeminiResponse(prompt) {
@@ -30,3 +31,4 @@ export async function getGeminiResponse(prompt) {
   const data = await response.json();
   return data?.candidates?.[0]?.content?.parts?.[0]?.text || "Resposta vazia.";
 }
+

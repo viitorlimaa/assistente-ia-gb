@@ -100,15 +100,18 @@ body {
   background: var(--card-bg);
   display: flex;
   align-items: center;
+  justify-content: space-between; /* garante espaçamento adequado */
   gap: 0.5rem;
   border-radius: 50px;
   padding: 0.7rem 1rem;
   border: 1px solid var(--border-color);
   margin: 0 auto 1.5rem auto;
+  max-width: 100%; /* não ultrapassa largura do container */
+  box-sizing: border-box;
 }
-
 .search-box input {
-  flex: 1;
+  flex: 1; /* ocupa todo o espaço disponível */
+  min-width: 0; /* evita que empurre os botões */
   background: none;
   border: none;
   outline: none;
@@ -116,16 +119,23 @@ body {
   font-size: 1rem;
 }
 
+
 .search-box input::placeholder {
   color: #888;
 }
 
 .search-box button {
+  flex-shrink: 0; /* impede o botão de "sumir" */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
   color: #888;
   font-size: 1.2rem;
+  padding: 0; /* evita aumentar altura do input */
+  line-height: 1;
 }
 
 .search-box button:hover {
