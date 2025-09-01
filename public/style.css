@@ -10,6 +10,40 @@
   --bot-msg-text: #eee;
 }
 
+/* === Tema claro === */
+[data-theme="light"] {
+  --bg-color: #f5f5f5;
+  --text-color: #111;
+  --card-bg: #ffff;
+  --border-color: #ccc;
+  --user-msg-bg: #aaa;
+  --user-msg-text: #fff;
+  --bot-msg-bg: #eaeaea;
+  --bot-msg-text: #111;
+}
+
+
+ /* === Animações de entrada === */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* variações de delay */
+.fade-delay-1 { animation-delay: 0.1s; }
+.fade-delay-2 { animation-delay: 0.2s; }
+.fade-delay-3 { animation-delay: 0.3s; }
+.fade-delay-4 { animation-delay: 0.4s; }
+.fade-delay-5 { animation-delay: 0.5s; }
+
 
 /* === Estilos base (MOBILE FIRST) === */
 body,
