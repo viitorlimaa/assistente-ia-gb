@@ -1,11 +1,10 @@
 import fetch from "node-fetch";
 import { GEMINI_API_KEY } from "../env/env.js";
 
-
 /**
- * 
- * @param {string} prompt 
- * @returns 
+ *
+ * @param {string} prompt
+ * @returns
  */
 
 export async function getGeminiResponse(prompt) {
@@ -13,7 +12,7 @@ export async function getGeminiResponse(prompt) {
     contents: [{ parts: [{ text: prompt }] }],
   };
 
-  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -31,4 +30,3 @@ export async function getGeminiResponse(prompt) {
   const data = await response.json();
   return data?.candidates?.[0]?.content?.parts?.[0]?.text || "Resposta vazia.";
 }
-
