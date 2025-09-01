@@ -114,4 +114,20 @@ if (clearChatBtn) {
       charCount.innerText = `0/${MAX_CHARS}`;
     }
   });
-}
+} 
+
+// Executa a animação dos elementos ao carregar a página
+window.addEventListener("DOMContentLoaded", () => {
+  const elements = [
+    document.querySelector(".app-header"),
+    document.querySelector(".search-box"),
+    document.querySelector("#chat-container"),
+  ];
+
+  elements.forEach((el, index) => {
+    if (el) {
+      el.classList.add("fade-in", `fade-delay-${index + 1}`);
+    }
+  });
+});
+
