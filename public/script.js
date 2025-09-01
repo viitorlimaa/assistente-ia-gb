@@ -9,7 +9,8 @@ const charCount = document.getElementById("char-count");
 // Contador interno de caracteres
 const MAX_CHARS = 200;
 userInput.addEventListener("input", () => {
-  if (userInput.value.length > MAX_CHARS) userInput.value = userInput.value.substring(0, MAX_CHARS);
+  if (userInput.value.length > MAX_CHARS)
+    userInput.value = userInput.value.substring(0, MAX_CHARS);
   charCount.innerText = `${userInput.value.length}/${MAX_CHARS}`;
 });
 
@@ -22,7 +23,10 @@ function toggleTheme() {
   localStorage.setItem("theme", next);
 }
 toggleThemeBtn.addEventListener("click", toggleTheme);
-document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
+document.documentElement.setAttribute(
+  "data-theme",
+  localStorage.getItem("theme") || "dark"
+);
 
 // Adiciona mensagens ao chat
 function addMessage(text, sender = "bot", isError = false) {
@@ -42,7 +46,8 @@ function addMessage(text, sender = "bot", isError = false) {
     copyBtn.appendChild(icon);
 
     copyBtn.addEventListener("click", () => {
-      navigator.clipboard.writeText(text)
+      navigator.clipboard
+        .writeText(text)
         .then(() => {
           const toast = document.createElement("div");
           toast.classList.add("copied-toast");
@@ -93,8 +98,6 @@ async function sendMessage() {
   }
 }
 
-
-
 // Eventos de envio
 sendBtn.addEventListener("click", sendMessage);
 userInput.addEventListener("keydown", (e) => {
@@ -107,14 +110,20 @@ userInput.addEventListener("keydown", (e) => {
 // Limpar toda a conversa com confirm
 if (clearChatBtn) {
   clearChatBtn.addEventListener("click", () => {
-    const confirmDelete = confirm("Tem certeza que deseja excluir toda a conversa?");
+    const confirmDelete = confirm(
+      "Tem certeza que deseja excluir toda a conversa?"
+    );
     if (confirmDelete) {
       chatContainer.innerHTML = "";
       userInput.value = "";
       charCount.innerText = `0/${MAX_CHARS}`;
     }
   });
+
+}
+
 } 
+
 
 // Executa a animação dos elementos ao carregar a página
 window.addEventListener("DOMContentLoaded", () => {
@@ -130,4 +139,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
 
